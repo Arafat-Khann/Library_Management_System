@@ -13,21 +13,25 @@ public class LibraryManagementSystem {
 
         initializeFiles();
 
-        while (true) {
+        while (true) 
+            {
 
             int loginChoice = loginMenu();
 
-            if (loginChoice == 1) {
+            if (loginChoice == 1) 
+                {
                 boolean success = adminLogin();
                 if (success)
                     adminMenu();
             }
-            else if (loginChoice == 2) {
+            else if (loginChoice == 2) 
+                {
                 boolean success = studentLogin();
                 if (success)
                     studentMenu();
             }
-            else if (loginChoice == 3) {
+            else if (loginChoice == 3) 
+                {
                 System.out.println("Exiting.");
                 break;
             }
@@ -45,13 +49,15 @@ public class LibraryManagementSystem {
             File bookFile = new File(booksFile);
             File histFile = new File(historyFile);
 
-            if (!accFile.exists()) {
+            if (!accFile.exists()) 
+                {
                 FileWriter w = new FileWriter(accountsFile);
                 w.write("admin,786\nstudent,786\n");
                 w.close();
             }
 
-            if (!bookFile.exists()) {
+            if (!bookFile.exists()) 
+                {
                 FileWriter bw = new FileWriter(booksFile);
 
                 bw.write("1001,The Republic,Plato,Philosophy,380,9780140455113,Available\n");
@@ -79,7 +85,8 @@ public class LibraryManagementSystem {
                 bw.close();
             }
 
-            if (!histFile.exists()) {
+            if (!histFile.exists()) 
+                {
                 FileWriter h = new FileWriter(historyFile);
                 h.write("");
                 h.close();
@@ -165,7 +172,7 @@ public class LibraryManagementSystem {
 
         System.out.println("Invalid credentials.");
         return false;
-    }
+    } 
 
 
     static void adminMenu() {
@@ -245,7 +252,7 @@ public class LibraryManagementSystem {
             }
 
             if (choice == 1)
-                searchBookStudent();
+                searchBook();
             else if (choice == 2)
                 checkAvailability();
             else if (choice == 3)
@@ -352,12 +359,195 @@ public class LibraryManagementSystem {
     }
 
 
-    static void updateBookInfo() {}
-    static void searchBook() {}
+    static void updateBookInfo() {
+       
+    while (true) {
+        System.out.print("\nEnter the Book ID to update (or 0 to cancel): ");
+        String bookId = sc.nextLine().trim();
+        if (bookId.equals("0")) return;
+
+        List<String> allBooks = new ArrayList<>();
+        boolean found = false;
+
+        try (Scanner fileScanner = new Scanner(new FileReader(booksFile))) {
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine();
+                String[] fields = line.split(",", -1);
+
+                if (fields[0].equals(bookId)) {
+                    found = true;
+                    System.out.println("Current Book Info:");
+                    System.out.println("ID: " + fields[0]);
+                    System.out.println("Title: " + fields[1]);
+                    System.out.println("Author: " + fields[2]);
+                    System.out.println("Category: " + fields[3]);
+                    System.out.println("Publish Year: " + fields[4]);
+                    System.out.println("ISBN: " + fields[5]);
+                    System.out.println("Availability: " + fields[6]);
+                    System.out.println("--------------------------");
+
+                    // Prompt for new values
+                    System.out.print("Enter new Title (leave blank to keep current): ");
+                    String tmp = sc.nextLine(); if (!tmp.isEmpty()) fields[1] = tmp;
+
+                    System.out.print("Enter new Author (leave blank to keep current): ");
+                    tmp = sc.nextLine(); if (!tmp.isEmpty()) fields[2] = tmp;
+
+                    System.out.print("Enter new Category (leave blank to keep current): ");
+                    tmp = sc.nextLine(); if (!tmp.isEmpty()) fields[3] = tmp;
+
+                    System.out.print("Enter new Publish Year (leave blank to keep current): ");
+                    tmp = sc.nextLine(); if (!tmp.isEmpty()) fields[4] = tmp;
+
+                    System.out.print("Enter new ISBN (leave blank to keep current): ");
+                    tmp = sc.nextLine(); if (!tmp.isEmpty()) fields[5] = tmp;
+
+                    System.out.print("Enter new Availability (leave blank to keep current): ");
+                    tmp = sc.nextLine(); if (!tmp.isEmpty()) fields[6] = tmp;
+
+                    line = String.join(",", fields);
+                    System.out.println("Book updated successfully!");
+                }
+                allBooks.add(line);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Error: books file not found.");
+            return;
+        }
+
+        if (!found) {
+            System.out.println("Book ID not found. Please try again.");
+            continue; // loop again to ask for correct ID
+        }
+
+        // Write updated data back to file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(booksFile))) {
+            for (String l : allBooks) {
+                writer.write(l);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Error writing to books file.");
+        }
+        break; // exit the update loop after successful update
+    }
+
+
+    }
+
+
+    static void searchBook() {
+          while (true) {
+        System.out.println("\n--- Search Book Menu ---");
+        System.out.println("1. Search by ID");
+        System.out.println("2. Search by Title");
+        System.out.println("3. Search by Author");
+        System.out.println("4. Search by Category");
+        System.out.println("5. Exit Search");
+        System.out.print("Enter your choice: ");
+
+        int choice = 0;
+        try {
+            choice = sc.nextInt();
+            sc.nextLine(); 
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please enter a number between 1 and 5.");
+            sc.nextLine(); 
+            continue;
+        }
+
+        if (choice == 5) {
+            break;
+        }
+
+        System.out.print("Enter search keyword: ");
+        String keyword = sc.nextLine().toLowerCase();
+        boolean found = false;
+
+        try (Scanner fileScanner = new Scanner(new FileReader(booksFile))) {
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine();
+                String[] fields = line.split(",", -1);
+                switch (choice) {
+                    case 1:
+                        if (fields[0].equalsIgnoreCase(keyword)) found = true;
+                        break;
+                    case 2:
+                        if (fields[1].toLowerCase().contains(keyword)) found = true;
+                        break;
+                    case 3:
+                        if (fields[2].toLowerCase().contains(keyword)) found = true;
+                        break;
+                    case 4:
+                        if (fields[3].toLowerCase().contains(keyword)) found = true;
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Please choose 1-5.");
+                        continue;
+                }
+                if (found) {
+                    System.out.println("\nBook Found:");
+                    System.out.println("ID: " + fields[0]);
+                    System.out.println("Title: " + fields[1]);
+                    System.out.println("Author: " + fields[2]);
+                    System.out.println("Category: " + fields[3]);
+                    System.out.println("Publish Year: " + fields[4]);
+                    System.out.println("ISBN: " + fields[5]);
+                    System.out.println("Availability: " + fields[6]);
+                    System.out.println("-----------------------------");
+                    found = false; 
+                }
+                
+                
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading books file.");
+        }
+    }
+    } 
+
+    static void changePassword(String username) {
+    System.out.print("Enter new password: ");
+    String newPassword = sc.nextLine().trim();
+
+    List<String> allAccounts = new ArrayList<>();
+    boolean updated = false;
+
+    try (Scanner fileScanner = new Scanner(new FileReader(accountsFile))) {
+        while (fileScanner.hasNextLine()) {
+            String line = fileScanner.nextLine();
+            String[] parts = line.split(",", -1);
+
+            if (parts[0].equals(username)) {
+                parts[1] = newPassword; // update password
+                updated = true;
+            }
+            allAccounts.add(parts[0] + "," + parts[1]);
+        }
+    } catch (IOException e) {
+        System.out.println("Error reading accounts file.");
+        return;
+    }
+
+    if (!updated) {
+        System.out.println("Username not found.");
+        return;
+    }
+
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(accountsFile))) {
+        for (String acc : allAccounts) {
+            writer.write(acc);
+            writer.newLine();
+        }
+        System.out.println("Password changed successfully!");
+    } catch (IOException e) {
+        System.out.println("Error writing accounts file.");
+    }
+}
+ 
     static void issueBook() {}
     static void returnBook() {}
     static void viewHistory() {}
-    static void searchBookStudent() {}
     static void checkAvailability() {}
     static void viewBorrowedBooks() {}
 
