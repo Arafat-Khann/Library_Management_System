@@ -1,0 +1,22 @@
+1001,The Republic,Plato,Philosophy,380,9780140455113,Available
+1002,Meditations,Marcus Aurelius,Philosophy,180,9780140449334,Available
+1003,Nicomachean Ethics,Aristotle,Philosophy,340,9780199213610,Available
+2001,Clean Code,Robert C. Martin,Programming,2008,9780132350884,Available
+2002,Java Complete Reference,Herbert Schildt,Programming,2022,9781260440232,Available
+2003,Introduction to Algorithms,CLRS,Programming,2009,9780262033848,Available
+2004,Head First Java,Kathy Sierra,Programming,2005,9780596009205,Available
+3001,Fundamentals of Physics,Halliday & Resnick,Physics,2014,9781118230718,Available
+3002,A Brief History of Time,Stephen Hawking,Physics,1988,9780553380163,Available
+3003,The Elegant Universe,Brian Greene,Physics,2003,9780393338102,Available
+4001,Economics,Paul Samuelson,Economics,2010,9780073511290,Available
+4002,The Wealth of Nations,Adam Smith,Economics,1776,9780140432084,Available
+4003,Capital in the Twenty-First Century,Thomas Piketty,Economics,2013,9780674430006,Available
+5001,Thinking Fast and Slow,Daniel Kahneman,Economics,2011,9780374533557,Available
+5002,The Metaphysics,Aristotle,Philosophy,350,9780140446197,Available
+6001,The Myth of Sisyphus,Albert Camus,Philosophy,1942,9780679733737,Available
+6002,Code Complete,Steve McConnell,Programming,2004,9780735619678,Available
+6003,Astrophysics for People in a Hurry,Neil deGrasse Tyson,Physics,2017,9780393609394,Available
+6004,Why Nations Fail,Acemoglu & Robinson,Economics,2012,9780307719225,Available
+6005,The Art of Computer Programming,Donald Knuth,Programming,1997,9780201896831,Available
+6006,Beyond Good and Evil,Friedrich Nietzsche,Philosophy,1886,9780141395837,Available
+7001,Sapiens: A Brief History of Humankind,Yuval Noah Harari,Philosophy,2011,9780062316097,Available
