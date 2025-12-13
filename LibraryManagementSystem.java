@@ -505,49 +505,134 @@ public class LibraryManagementSystem {
         }
     }
     } 
+      static void issueBook() {
+         System.out.print("Enter Book ID: ");
+         String bookId = sc.nextLine();
 
-    static void changePassword(String username) {
-    System.out.print("Enter new password: ");
-    String newPassword = sc.nextLine().trim();
+    List<String> list = new ArrayList<>();
+    boolean done = false;
 
-    List<String> allAccounts = new ArrayList<>();
-    boolean updated = false;
+    try {
+        Scanner fs = new Scanner(new FileReader(booksFile));
 
-    try (Scanner fileScanner = new Scanner(new FileReader(accountsFile))) {
-        while (fileScanner.hasNextLine()) {
-            String line = fileScanner.nextLine();
-            String[] parts = line.split(",", -1);
+        while (fs.hasNextLine()) {
+            String line = fs.nextLine();
+            String[] f = line.split(",");
 
-            if (parts[0].equals(username)) {
-                parts[1] = newPassword; // update password
-                updated = true;
+            if (f[0].equals(bookId) && f[6].equals("Available")) {
+                f[6] = "Issued";
+                done = true;
+
+                FileWriter fw = new FileWriter(historyFile, true);
+                fw.write("Book " + bookId + " issued\n");
+                fw.close();
+
+                System.out.println("Book issued.");
             }
-            allAccounts.add(parts[0] + "," + parts[1]);
+
+            list.add(String.join(",", f));
         }
-    } catch (IOException e) {
-        System.out.println("Error reading accounts file.");
+        fs.close();
+    }
+    catch (Exception e) {
+        System.out.println("Error issuing book.");
         return;
     }
 
-    if (!updated) {
-        System.out.println("Username not found.");
+    if (!done) {
+        System.out.println("Book not available or not found.");
         return;
     }
 
-    try (BufferedWriter writer = new BufferedWriter(new FileWriter(accountsFile))) {
-        for (String acc : allAccounts) {
-            writer.write(acc);
-            writer.newLine();
+    try {
+        BufferedWriter bw = new BufferedWriter(new FileWriter(booksFile));
+        for (String s : list) {
+            bw.write(s);
+            bw.newLine();
         }
-        System.out.println("Password changed successfully!");
-    } catch (IOException e) {
-        System.out.println("Error writing accounts file.");
+        bw.close();
     }
-}
- 
-    static void issueBook() {}
-    static void returnBook() {}
-    static void viewHistory() {}
+    catch (IOException e) {
+        System.out.println("Error updating file.");
+    }
+    }
+    static void returnBook() {
+        
+    System.out.print("Enter Book ID: ");
+    String bookId = sc.nextLine();
+
+    List<String> list = new ArrayList<>();
+    boolean done = false;
+
+    try {
+        Scanner fs = new Scanner(new FileReader(booksFile));
+
+        while (fs.hasNextLine()) {
+            String line = fs.nextLine();
+            String[] f = line.split(",");
+
+            if (f[0].equals(bookId) && f[6].equals("Issued")) {
+                f[6] = "Available";
+                done = true;
+
+                FileWriter fw = new FileWriter(historyFile, true);
+                fw.write("Book " + bookId + " returned\n");
+                fw.close();
+
+                System.out.println("Book returned.");
+            }
+
+            list.add(String.join(",", f));
+        }
+        fs.close();
+    }
+    catch (Exception e) {
+        System.out.println("Error returning book.");
+        return;
+    }
+
+    if (!done) {
+        System.out.println("Book not issued or not found.");
+        return;
+    }
+
+    try {
+        BufferedWriter bw = new BufferedWriter(new FileWriter(booksFile));
+        for (String s : list) {
+            bw.write(s);
+            bw.newLine();
+        }
+        bw.close();
+    }
+    catch (IOException e) {
+        System.out.println("Error updating file.");
+    }
+    }
+    static void viewHistory() {
+         try {
+        Scanner hs = new Scanner(new FileReader(historyFile));
+
+        if (!hs.hasNextLine()) {
+            System.out.println("No history available.");
+            hs.close();
+            return;
+        }
+
+        System.out.println("\n--- Issue / Return History ---");
+
+        while (hs.hasNextLine()) {
+            System.out.println(hs.nextLine());
+        }
+
+        hs.close();
+    }
+    catch (FileNotFoundException e) {
+        System.out.println("History file not found.");
+    }
+    catch (Exception e) {
+        System.out.println("Error reading history file.");
+    }
+    }
     static void checkAvailability() {}
     static void viewBorrowedBooks() {}
 
