@@ -1,5 +1,2 @@
 admin,786
-student1,786
-student2,687
-student3,123
-
+student,786
