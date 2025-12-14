@@ -1,6 +1,11 @@
 import java.io.*;
 import java.util.*;
 
+/*
+ This program implements a basic Library Management System
+ using file handling, control structures, arrays and exception handling.
+*/
+
 public class LibraryManagementSystem {
 
     static Scanner sc = new Scanner(System.in);
@@ -28,6 +33,8 @@ public class LibraryManagementSystem {
             }
         }
     }
+
+// This method creates the required files, if the files do not already exist.
 
     static void initializeFiles() {
         try {
@@ -75,9 +82,11 @@ public class LibraryManagementSystem {
                 pw.close();
             }
 
+        } catch (IOException e) {
+            System.out.println("File I/O error during initialization.");
         } catch (Exception e) {
-            System.out.println("Error initializing files.");
-        }
+            System.out.println("Error initializing files."); }
+ 
     }
 
     static int loginMenu() {
@@ -119,6 +128,8 @@ public class LibraryManagementSystem {
         return validateLogin(user, pass);
     }
 
+// This method validates user login by reading username and password from the accounts file.
+
     static boolean validateLogin(String username, String password) {
         try {
             Scanner accountScanner = new Scanner(new File(accountsFile));
@@ -134,6 +145,8 @@ public class LibraryManagementSystem {
                 }
             }
             accountScanner.close();
+        } catch (FileNotFoundException e) { 
+            System.out.println("Accounts file not found.");
         } catch (Exception e) {
             System.out.println("Error reading accounts file.");
         }
@@ -220,7 +233,7 @@ public class LibraryManagementSystem {
         }
     }
 
-
+// This method adds a new book in the system.
     static void addBook() {
         System.out.print("Enter Book ID: ");
         String bookId = sc.nextLine();
@@ -250,6 +263,8 @@ public class LibraryManagementSystem {
         }
     }
 
+// This method displays all the registered books in the system.
+
     static void viewBooks() {
         try {
             Scanner bookScanner = new Scanner(new FileReader(booksFile));
@@ -277,6 +292,8 @@ public class LibraryManagementSystem {
             System.out.println("Error reading books file.");
         }
     }
+
+// This method helps in changing the information of the book by requiring book ID.
 
     static void updateBookInfo() {
 
@@ -346,10 +363,16 @@ public class LibraryManagementSystem {
         pw.print(updatedData);
         pw.close();
 
+    } catch (FileNotFoundException e) {
+        System.out.println("Books file not found.");
+    } catch (IOException e) {
+        System.out.println("Error writing to book file.");    
     } catch (Exception e) {
         System.out.println("Error updating books file.");
     }
 }
+
+// This method allows searching books based on different fields.
 
     static void searchBook() {
 
@@ -457,6 +480,11 @@ public class LibraryManagementSystem {
     }
 }
 
+/*
+ This method issues a book by updating its availability status
+ and rewriting the modified data back to the file.
+*/
+
     static void issueBook() {
 
     System.out.print("Enter Book ID: ");
@@ -501,10 +529,16 @@ public class LibraryManagementSystem {
         pw.print(updatedData);
         pw.close();
 
+    } catch (FileNotFoundException e) {
+        System.out.println("Books file not found.");
+    } catch (IOException e) {
+        System.out.println("Error writing to history file.");
     } catch (Exception e) {
         System.out.println("Error issuing book.");
     }
 }
+
+// This method returns the book by changing its status from issued to available.
 
     static void returnBook() {
     System.out.print("Enter Book ID: ");
@@ -549,10 +583,16 @@ public class LibraryManagementSystem {
         pw.print(updatedData);
         pw.close();
 
+    } catch (FileNotFoundException e) {
+        System.out.println("Books file not found.");
+    } catch (IOException e) {
+        System.out.println("Error writing to history file.");
     } catch (Exception e) {
         System.out.println("Error returning book.");
     }
 }
+
+// This method displays the whole issue and return history by reading the history file.
 
     static void viewHistory() {
         try {
@@ -567,10 +607,14 @@ public class LibraryManagementSystem {
                 System.out.println(hs.nextLine());
             }
             hs.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("History file not found.");
         } catch (Exception e) {
             System.out.println("Error reading history.");
         }
     }
+
+// This method displays all books that are currently available.
 
     static void checkAvailability() {
     try {
@@ -606,6 +650,8 @@ public class LibraryManagementSystem {
         System.out.println("Error reading books file.");
     }
 }
+
+//This method shows all the borrowed books by students.
 
     static void viewBorrowedBooks() {
         try {
